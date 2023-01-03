@@ -1,32 +1,44 @@
-public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-    int m= nums1.length;
-        int n= nums2.length;
-        int i=0;
-        int j=0;
-        int k=0;
-        int length = nums1.length+nums2.length;
-        int middle = length/2;
-        int mid2 =0;
-        int mid1=0;
-        while (i<=middle){
-            mid1=mid2;
-            if(j<m && k <n) {
-                if (nums1[j] < nums2[k]) {
-                    mid2= nums1[j];
-                    j++;
-                } else {
-                    mid2= nums2[k];
-                    k++;
+class Solution {
+    func findMedianSortedArrays(_ nums1: [Int], _ nums2: [Int]) -> Double {
+        let totalNumbers = nums1.count + nums2.count
+        guard totalNumbers>0 else {return 0.0}
+
+        var sortedNumber: [Int] = []
+        var nums1 = nums1
+        var nums2 = nums2
+
+        for i in 0...totalNumbers{
+            if let num1 = nums1.first , let num2 = nums2.first{
+                if num1 <= num2{
+                    sortedNumber.append(num1)
+                    nums1.removeFirst()
+                }else{
+                    sortedNumber.append(num2)
+                    nums2.removeFirst()
                 }
-            } else if (j<m) {
-                mid2=nums1[j];
-                j++;
+
+            }else if let num1 = nums1.first{
+                sortedNumber.append(num1)
+                nums1.removeFirst()
+
+            }else if let num2 = nums2.first{
+                sortedNumber.append(num2)
+                nums2.removeFirst()
             }
-            else {``
-                mid2=nums2[k];
-                k++;
-            }
-            i++;
         }
-        double median = (length % 2==0)?(mid1+mid2)/2.0: mid2;
-    return median;
+
+        var median: Double = 0.0
+        let x = totalNumbers/2 //normal mid index
+
+        if totalNumbers%2 == 0{
+            let midX = sortedNumber[x]
+            let midY = sortedNumber[x-1]
+            median = (Double(midX) + Double(midY)) / 2
+
+        }else{
+            median = Double(sortedNumber[x])
+        }
+
+        return median
+    }
+}
